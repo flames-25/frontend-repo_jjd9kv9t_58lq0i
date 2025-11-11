@@ -23,7 +23,7 @@ function App() {
 
       {/* Hero Section (no title text) */}
       <main className="relative z-10 mx-auto flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-center px-6 text-center">
-        {/* Glowing Heart centerpiece (SVG for perfect geometry) */}
+        {/* Glowing Heart centerpiece (SVG with gradient border) */}
         <div className="relative mt-4 h-64 w-64 sm:h-80 sm:w-80">
           {/* Outer glow halo */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-400/50 via-rose-400/45 to-fuchsia-400/55 blur-2xl" />
@@ -36,6 +36,7 @@ function App() {
             viewBox="0 0 200 180"
             role="img"
             aria-label="Love heart"
+            shapeRendering="geometricPrecision"
           >
             <defs>
               <linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1">
@@ -49,6 +50,13 @@ function App() {
                 <stop offset="45%" stopColor="rgba(244,114,182,0.35)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0)" />
               </radialGradient>
+              {/* Gradient border */}
+              <linearGradient id="heartStroke" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#fecdd3" />
+                <stop offset="50%" stopColor="#f9a8d4" />
+                <stop offset="100%" stopColor="#f472b6" />
+              </linearGradient>
+              {/* Subtle outer glow along the stroke */}
               <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="6" result="blur" />
                 <feMerge>
@@ -56,6 +64,11 @@ function App() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
+              {/* Inner highlight along border */}
+              <linearGradient id="innerStroke" x1="0.2" y1="0" x2="0.8" y2="1">
+                <stop offset="0%" stopColor="#fff" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+              </linearGradient>
             </defs>
 
             <g filter="url(#softGlow)" className="origin-center animate-pulse-heart">
@@ -68,6 +81,28 @@ function App() {
               <path
                 d="M100 160 C 74 142, 30 116, 22 82 C 19 69, 21 53, 34 43 C 49 31, 70 33, 83 47 L 100 64 L 117 47 C 130 33, 151 31, 166 43 C 179 53, 181 69, 178 82 C 170 116, 126 142, 100 160 Z"
                 fill="url(#heartHighlight)"
+              />
+              {/* Gradient border (outer) */}
+              <path
+                d="M100 168 C 70 148, 22 120, 12 82 C 8 66, 12 46, 28 34 C 46 20, 72 22, 86 36 L 100 50 L 114 36 C 128 22, 154 20, 172 34 C 188 46, 192 66, 188 82 C 178 120, 130 148, 100 168 Z"
+                fill="none"
+                stroke="url(#heartStroke)"
+                strokeWidth="4.5"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                opacity="0.9"
+              />
+              {/* Inner light border for polish */}
+              <path
+                d="M100 160 C 74 142, 30 116, 22 82 C 19 69, 21 53, 34 43 C 49 31, 70 33, 83 47 L 100 64 L 117 47 C 130 33, 151 31, 166 43 C 179 53, 181 69, 178 82 C 170 116, 126 142, 100 160 Z"
+                fill="none"
+                stroke="url(#innerStroke)"
+                strokeWidth="2.2"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                opacity="0.8"
               />
             </g>
           </svg>
