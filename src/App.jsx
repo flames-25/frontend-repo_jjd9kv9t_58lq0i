@@ -8,6 +8,7 @@ function App() {
         <div className="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-pink-300/30 blur-3xl" />
         <div className="absolute top-40 -right-10 h-96 w-96 rounded-full bg-rose-300/30 blur-3xl" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-72 w-[36rem] rounded-full bg-fuchsia-300/30 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0)_20%,rgba(244,114,182,0.08)_55%,rgba(190,24,93,0.14)_100%)]" />
       </div>
 
       {/* Navigation (simple brand) */}
@@ -22,13 +23,54 @@ function App() {
 
       {/* Hero Section (no title text) */}
       <main className="relative z-10 mx-auto flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-center px-6 text-center">
-        {/* Glowing Heart centerpiece */}
+        {/* Glowing Heart centerpiece (SVG for perfect geometry) */}
         <div className="relative mt-4 h-64 w-64 sm:h-80 sm:w-80">
-          {/* Outer glow */}
+          {/* Outer glow halo */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-400/50 via-rose-400/45 to-fuchsia-400/55 blur-2xl" />
 
-          {/* Improved Heart Shape (clip-path) */}
-          <div className="heart-shape absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 sm:h-60 sm:w-60" />
+          {/* Heart SVG */}
+          <svg
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_10px_35px_rgba(236,72,153,0.45)]"
+            width="100%"
+            height="100%"
+            viewBox="0 0 200 180"
+            role="img"
+            aria-label="Love heart"
+          >
+            <defs>
+              <linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#fb7185" />
+                <stop offset="50%" stopColor="#ec4899" />
+                <stop offset="100%" stopColor="#db2777" />
+              </linearGradient>
+              <radialGradient id="heartHighlight" cx="35%" cy="30%" r="60%">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
+                <stop offset="10%" stopColor="rgba(255,255,255,0.75)" />
+                <stop offset="45%" stopColor="rgba(244,114,182,0.35)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+              </radialGradient>
+              <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <g filter="url(#softGlow)" className="origin-center animate-pulse-heart">
+              {/* Base heart */}
+              <path
+                d="M100 168 C 70 148, 22 120, 12 82 C 8 66, 12 46, 28 34 C 46 20, 72 22, 86 36 L 100 50 L 114 36 C 128 22, 154 20, 172 34 C 188 46, 192 66, 188 82 C 178 120, 130 148, 100 168 Z"
+                fill="url(#heartGrad)"
+              />
+              {/* Inner shading */}
+              <path
+                d="M100 160 C 74 142, 30 116, 22 82 C 19 69, 21 53, 34 43 C 49 31, 70 33, 83 47 L 100 64 L 117 47 C 130 33, 151 31, 166 43 C 179 53, 181 69, 178 82 C 170 116, 126 142, 100 160 Z"
+                fill="url(#heartHighlight)"
+              />
+            </g>
+          </svg>
 
           {/* Sparkles */}
           <div className="absolute inset-0">
@@ -37,15 +79,15 @@ function App() {
                 key={i}
                 className="sparkle absolute h-1.5 w-1.5 rounded-full bg-white/90 shadow-[0_0_12px_2px_rgba(255,255,255,0.85)]"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
+                  left: `${(i * 37) % 100}%`,
+                  top: `${(i * 23) % 100}%`,
+                  animationDelay: `${(i % 7) * 0.25}s`,
                 }}
               />
             ))}
           </div>
 
-          {/* Floating hearts */}
+          {/* Floating mini hearts */}
           <div className="pointer-events-none absolute inset-0" aria-hidden>
             {Array.from({ length: 6 }).map((_, i) => (
               <div
@@ -53,11 +95,22 @@ function App() {
                 className="float-heart absolute opacity-80"
                 style={{
                   left: `${10 + i * 14}%`,
-                  bottom: `${Math.random() * 10}%`,
-                  animationDelay: `${i * 0.6}s`,
+                  bottom: `${(i * 9) % 12}%`,
+                  animationDelay: `${i * 0.55}s`,
                 }}
               >
-                <div className="heart-mini" />
+                <svg width="26" height="24" viewBox="0 0 50 46" className="drop-shadow-[0_6px_14px_rgba(244,63,94,0.35)]">
+                  <defs>
+                    <linearGradient id={`mini-${i}`} x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#fb7185" />
+                      <stop offset="100%" stopColor="#ec4899" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M25 44 C 18 39, 6 32, 4 22 C 3 18, 4 13, 9 9 C 14 5, 21 6, 24 10 L 25 12 L 26 10 C 29 6, 36 5, 41 9 C 46 13, 47 18, 46 22 C 44 32, 32 39, 25 44 Z"
+                    fill={`url(#mini-${i})`}
+                  />
+                </svg>
               </div>
             ))}
           </div>
@@ -86,12 +139,14 @@ function App() {
         Dibuat dengan cinta — semoga harimu dipenuhi kebahagiaan ✨
       </footer>
 
-      {/* Component-scoped styles for heart + animations */}
+      {/* Component-scoped styles for animations */}
       <style>{`
-        @keyframes pulseGlow {
-          0%, 100% { filter: drop-shadow(0 0 12px rgba(244, 63, 94, 0.55)) drop-shadow(0 0 28px rgba(236, 72, 153, 0.45)); transform: translate(-50%, -50%) scale(1); }
-          50% { filter: drop-shadow(0 0 26px rgba(244, 63, 94, 0.9)) drop-shadow(0 0 48px rgba(236, 72, 153, 0.75)); transform: translate(-50%, -50%) scale(1.06); }
+        @keyframes pulseGlowSvg {
+          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(244,63,94,0.45)) drop-shadow(0 0 22px rgba(236,72,153,0.35)); }
+          50% { transform: scale(1.06); filter: drop-shadow(0 0 22px rgba(244,63,94,0.85)) drop-shadow(0 0 44px rgba(236,72,153,0.65)); }
         }
+        .animate-pulse-heart { animation: pulseGlowSvg 2.8s ease-in-out infinite; transform-origin: 50% 50%; }
+
         @keyframes floatUp {
           0% { transform: translateY(0) scale(1); opacity: 0.9; }
           60% { opacity: 1; }
@@ -102,35 +157,7 @@ function App() {
           50% { transform: scale(1.5); opacity: 1; }
         }
 
-        /* Heart using clip-path for crisp shape */
-        .heart-shape {
-          position: absolute;
-          transform: translate(-50%, -50%);
-          background: radial-gradient(110% 120% at 30% 25%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.85) 8%, rgba(244,114,182,.7) 40%, rgba(244,63,94,.95) 88%),
-                      linear-gradient(135deg, #fb7185 0%, #ec4899 45%, #db2777 100%);
-          clip-path: path('M 50 15 C 35 0, 0 5, 0 35 C 0 60, 25 80, 50 95 C 75 80, 100 60, 100 35 C 100 5, 65 0, 50 15 Z');
-          /* Path is normalized to 100x100, scale with width/height */
-          box-shadow: inset 0 6px 12px rgba(255,255,255,.65), 0 20px 40px rgba(244,63,94,.35), 0 0 60px rgba(236,72,153,.35);
-          animation: pulseGlow 2.8s ease-in-out infinite;
-        }
-        .heart-shape::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(60% 50% at 35% 30%, rgba(255,255,255,.65), transparent 60%);
-          pointer-events: none;
-          mix-blend-mode: screen;
-        }
-
-        /* Mini floating hearts reusing same path */
-        .heart-mini {
-          width: 24px; height: 24px;
-          background: linear-gradient(135deg, #fb7185, #ec4899);
-          clip-path: path('M 50 15 C 35 0, 0 5, 0 35 C 0 60, 25 80, 50 95 C 75 80, 100 60, 100 35 C 100 5, 65 0, 50 15 Z');
-          box-shadow: 0 8px 20px rgba(244, 63, 94, .25);
-        }
-
-        .float-heart { animation: floatUp 5s ease-in infinite; }
+        .float-heart { animation: floatUp 5.2s ease-in infinite; }
         .sparkle { animation: twinkle 1.6s ease-in-out infinite; }
       `}</style>
     </div>
